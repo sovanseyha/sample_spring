@@ -21,7 +21,7 @@ pipeline {
     }
     stage('Deploy') {
       steps {
-        sh 'docker run -d -p 8083:8080 sovanseyha/springjenkins'
+        sh 'docker run -d -p 8084:8080 sovanseyha/springjenkins'
       }
     }
   }
