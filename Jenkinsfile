@@ -10,7 +10,12 @@ pipeline {
       steps {
         sh 'mvn clean install'
         sh 'mvn package'
-        sh 'docker build -t sovanseyha/springjenkins .'
+        sh 'docker build -t sovanseyha/devops-spring-test:{BUILD_NUMBER} .'
+      }
+    }
+    stage('Run docker image') {
+      steps {
+        sh 'docker run --name test -d -p 8888:8080 sovanseyha/devops-spring-test:{BUILD_NUMBER}'
       }
     }
     stage('Test') {
@@ -19,9 +24,19 @@ pipeline {
         sh 'mvn test'
       }
     }
-    stage('Deploy') {
+    stage('Stop docker container') {
       steps {
-        sh 'docker run -d -p 8085:8080 sovanseyha/springjenkins'
+        sh 'docker rm test -f'
+      }
+    }
+    stage('Push docker image') {
+      steps {
+        sh 'docker push sovanseyha/devops-spring-test:{BUILD_NUMBER}'
+      }
+    }
+    stage('Trigger Manifest Update') {
+      steps {
+        build job: 'update-manifest', parameters: [string(name: 'DOCKERTAG', value: env.BUILD_NUMBER)]
       }
     }
   }
