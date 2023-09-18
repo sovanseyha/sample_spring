@@ -31,7 +31,10 @@ pipeline {
     }
     stage('Push docker image') {
       steps {
-        sh 'docker push sovanseyha/devops-spring-test:${BUILD_NUMBER}'
+        withCredentials([usernamePassword(credentialsId: 'DockerHub Credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+          sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
+          sh "docker push sovanseyha/devops-spring-test:${BUILD_NUMBER}"
+        }
       }
     }
     stage('Trigger Manifest Update') {
