@@ -15,7 +15,7 @@ pipeline {
     }
     stage('Run docker image') {
       steps {
-        sh 'docker run --name test -d -p 8888:8080 sovanseyha/devops-spring-test:{BUILD_NUMBER}'
+        sh 'docker run --name test -d -p 8080:8080 sovanseyha/devops-spring-test:{BUILD_NUMBER}'
       }
     }
     stage('Test') {
