@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v2000/")
 public class PrintController {
-    @GetMapping("/somanang")
+    @GetMapping("/យ៉ាន សុវណ្ណសីហា")
     public ResponseEntity<String> saySomething(@RequestParam String words){
         return ResponseEntity.ok(words);
     }
