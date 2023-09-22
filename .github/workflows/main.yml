@@ -27,7 +27,7 @@ jobs:
       with: 
         image: sovanseyha/devops-spring-test
         tags: seiha
-        rigistry: docker.io
+        registry: docker.io
         dockerfile: Dockerfile
         username: ${{ secrets.DOCKER_HUB_USERNAME }}
         password: ${{ secrets.DOCKER_HUB_PASSWORD }}
