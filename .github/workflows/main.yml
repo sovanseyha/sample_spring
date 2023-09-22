@@ -20,14 +20,14 @@ jobs:
         java-version: 17
         
     - name: Build maven project
-      run: mvn clean package
+      run: mvn clean package  
 
     - name: Build & Push docker image
       uses: mr-smithers-excellent/docker-build-push@v6
       with: 
         image: sovanseyha/devops-spring-test
-        tag: seiha
+        tags: seiha
         rigistry: docker.io
         dockerfile: Dockerfile
         username: ${{ secrets.DOCKER_HUB_USERNAME }}
-        password: ${{ secrets.DOCEKR_HUB_PASSWORD }}
+        password: ${{ secrets.DOCKER_HUB_PASSWORD }}
