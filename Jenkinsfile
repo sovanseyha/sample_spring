@@ -6,7 +6,6 @@ pipeline {
         DOCKER_REGISTRY = 'sovanseyha'
         TELEGRAM_BOT_TOKEN = credentials('telegramToken')
         TELEGRAM_CHAT_ID = credentials('telegramChatid')
-        PROJECT_NAME = 'Your_Project_Name'  // Set your project name here
     }
 
     stages {
