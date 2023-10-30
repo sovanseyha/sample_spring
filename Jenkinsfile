@@ -58,6 +58,9 @@ pipeline {
                     try {
                         echo "Starting Deploy stage"
                         withCredentials([usernamePassword(credentialsId: 'dockerhub_id', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                            // Log in to the Docker registry
+                            sh "docker login -u \$DOCKER_USERNAME -p \$DOCKER_PASSWORD"
+
                             def existImageID = sh(script: "docker ps -aq -f name='${MY_IMAGE}'", returnStdout: true)
                             echo "ExistImageID:${existImageID}"
                             if (existImageID) {
@@ -66,7 +69,9 @@ pipeline {
                             } else {
                                 echo 'No existing container'
                             }
-                            sh "docker run -d -p 8081:80 --name ${MY_IMAGE} -e DOCKER_USERNAME=\$DOCKER_USERNAME -e DOCKER_PASSWORD=\$DOCKER_PASSWORD ${MY_IMAGE}"
+                            // Pull and run the Docker image
+                            sh "docker pull ${DOCKER_REGISTRY}/${MY_IMAGE}:${BUILD_NUMBER}"
+                            sh "docker run -d -p 8081:80 --name ${MY_IMAGE} ${DOCKER_REGISTRY}/${MY_IMAGE}:${BUILD_NUMBER}"
                         }
                         def status = currentBuild.resultIsBetterOrEqualTo('SUCCESS') ? 'Succeed' : 'Failed'
                         sendToTelegram("🚀 Deployment Status: ${status} for Build #${BUILD_NUMBER}")
