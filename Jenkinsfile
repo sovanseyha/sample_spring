@@ -18,7 +18,7 @@ pipeline {
                         echo "Starting Build stage"
                         sh 'mvn clean install'
                         sh 'mvn package'
-                        sh 'docker build -t ${DOCKER_REGISTRY}/${MY_IMAGE}:${BUILD_NUMBER} .'
+                        sh "docker build -t ${DOCKER_REGISTRY}/${MY_IMAGE}:${BUILD_NUMBER} ."
                         echo "Build completed successfully"
                         currentBuild.result = 'SUCCESS'
                         sendToTelegram("✅ Build Succeeded for Build #${BUILD_NUMBER}")
@@ -26,7 +26,7 @@ pipeline {
                         echo "Build failed with error: ${e}"
                         currentBuild.result = 'FAILURE'
                         currentBuild.description = e.toString()
-                        def errorLog = sh(script: 'cat ${JENKINS_HOME}/jobs/${JOB_NAME}/builds/${BUILD_NUMBER}/log', returnStdout: true)
+                        def errorLog = sh(script: "cat ${JENKINS_HOME}/jobs/${JOB_NAME}/builds/${BUILD_NUMBER}/log", returnStdout: true)
                         echo "Error Log:\n${errorLog}"
                         sendToTelegram("❌ Build Failed for Build #${BUILD_NUMBER}\nError Message:\n${errorLog}")
                         error("Build stage failed") // Mark the stage as failed
@@ -58,15 +58,15 @@ pipeline {
                     try {
                         echo "Starting Deploy stage"
                         withCredentials([usernamePassword(credentialsId: 'dockerhub_id', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                            def existImageID = sh(script: 'docker ps -aq -f name="${MY_IMAGE}"', returnStdout: true)
+                            def existImageID = sh(script: "docker ps -aq -f name='${MY_IMAGE}'", returnStdout: true)
                             echo "ExistImageID:${existImageID}"
                             if (existImageID) {
-                                echo '${existImageID} is removing ...'
-                                sh 'docker rm -f ${MY_IMAGE}'
+                                echo "${existImageID} is removing ..."
+                                sh "docker rm -f ${MY_IMAGE}"
                             } else {
                                 echo 'No existing container'
                             }
-                            sh "docker run -d -p 8081:80 --name ${MY_IMAGE} -e DOCKER_USERNAME=$DOCKER_USERNAME -e DOCKER_PASSWORD=$DOCKER_PASSWORD ${MY_IMAGE}"
+                            sh "docker run -d -p 8081:80 --name ${MY_IMAGE} -e DOCKER_USERNAME=\$DOCKER_USERNAME -e DOCKER_PASSWORD=\$DOCKER_PASSWORD ${MY_IMAGE}"
                         }
                         def status = currentBuild.resultIsBetterOrEqualTo('SUCCESS') ? 'Succeed' : 'Failed'
                         sendToTelegram("🚀 Deployment Status: ${status} for Build #${BUILD_NUMBER}")
@@ -85,7 +85,7 @@ pipeline {
     post {
         always {
             echo "Sending email notification"
-            emailext body: 'Check console output at $BUILD_URL to view the results.', subject: '${PROJECT_NAME} - Build #${BUILD_NUMBER} - $BUILD_STATUS', to: 'yan.sovanseyha@gmail.com'
+            emailext body: "Check console output at $BUILD_URL to view the results.", subject: "${PROJECT_NAME} - Build #${BUILD_NUMBER} - $BUILD_STATUS", to: "yan.sovanseyha@gmail.com"
         }
     }
 }
