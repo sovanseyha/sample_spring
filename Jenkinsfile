@@ -9,7 +9,7 @@ pipeline {
         CONTAINER_NAME = 'jenkins-container'
         TELEGRAM_BOT_TOKEN = credentials('telegramToken')
         TELEGRAM_CHAT_ID = credentials('telegramChatid')
-        PROJECT_NAME = 'Your_Project_Name' // Set the project name here
+        PROJECT_NAME = 'Spring Jenkins'
     }
     stages {
         stage('Build') {
