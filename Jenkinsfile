@@ -69,9 +69,7 @@ pipeline {
                             } else {
                                 echo 'No existing container'
                             }
-                            // Pull and run the Docker image
-                            sh "docker pull ${DOCKER_REGISTRY}/${MY_IMAGE}:${BUILD_NUMBER}"
-                            sh "docker run -d -p 8081:80 --name ${MY_IMAGE} ${DOCKER_REGISTRY}/${MY_IMAGE}:${BUILD_NUMBER}"
+                            sh "docker run -d -p 8081:80 ${DOCKER_REGISTRY}/${MY_IMAGE}:${BUILD_NUMBER}"
                         }
                         def status = currentBuild.resultIsBetterOrEqualTo('SUCCESS') ? 'Succeed' : 'Failed'
                         sendToTelegram("🚀 Deployment Status: ${status} for Build #${BUILD_NUMBER}")
