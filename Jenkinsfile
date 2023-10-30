@@ -9,7 +9,7 @@ pipeline {
         CONTAINER_NAME = 'jenkins-container'
         TELEGRAM_BOT_TOKEN = credentials('telegramToken')
         TELEGRAM_CHAT_ID = credentials('telegramChatid')
-        //PROJECT_NAME = 'Your_Project_Name' // Set the project name here
+        PROJECT_NAME = 'Your_Project_Name' // Set the project name here
     }
     stages {
         stage('Build') {
@@ -88,10 +88,7 @@ pipeline {
     }
     post {
         always {
-            script {
-                def buildStatus = currentBuild.resultIsBetterOrEqualTo('SUCCESS') ? 'SUCCESS' : 'FAILURE'
-                emailext body: "Check console output at $BUILD_URL to view the results.", subject: "${PROJECT_NAME} - Build #${BUILD_NUMBER} - ${buildStatus}", to: 'yan.sovanseyha@gmail.com'
-            }
+            emailext body: 'Check console output at $BUILD_URL to view the results.', subject: "${PROJECT_NAME} - Build #${BUILD_NUMBER} - ${currentBuild.result}", to: 'yan.sovanseyha@gmail.com'
         }
     }
 }
