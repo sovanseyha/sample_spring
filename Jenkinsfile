@@ -9,7 +9,7 @@ pipeline {
         CONTAINER_NAME = 'jenkins-container'
         TELEGRAM_BOT_TOKEN = credentials('telegramToken')
         TELEGRAM_CHAT_ID = credentials('telegramChatid')
-        PROJECT_NAME = 'Spring Jenkins Test'
+        //PROJECT_NAME = 'Spring Jenkins Test'
     }
     stages {
         stage('Build') {
@@ -88,8 +88,7 @@ pipeline {
     }
     post {
         always {
-            echo "Sending email notification"
-            emailext body: "Check console output at $BUILD_URL to view the results.", subject: "${PROJECT_NAME} - Build #${BUILD_NUMBER} - $BUILD_STATUS", to: "yan.sovanseyha@gmail.com"
+            emailext body: 'Check console output at $BUILD_URL to view the results.', subject: '${PROJECT_NAME} - Build #${BUILD_NUMBER} - $BUILD_STATUS', to: 'yan.sovanseyha@gmail.com'
         }
     }
 }
