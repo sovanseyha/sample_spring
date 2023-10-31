@@ -70,7 +70,9 @@ pipeline {
                             } else {
                                 echo 'No existing container'
                             }
-                            sh "docker run -d -p 8081:80 ${DOCKER_REGISTRY}/${MY_IMAGE}:${BUILD_NUMBER}"
+                            
+                            // Use Docker Compose to deploy the application
+                            sh 'docker-compose up -d'
                         }
                         def status = currentBuild.resultIsBetterOrEqualTo('SUCCESS') ? 'Succeed' : 'Failed'
                         sendToTelegram("🚀 Deployment Status: ${status} for Build #${BUILD_NUMBER}")
