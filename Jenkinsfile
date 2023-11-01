@@ -72,7 +72,8 @@ pipeline {
                             }
                             
                             // Use Docker Compose to deploy the application
-                            sh 'docker-compose up -d'
+                            sh 'docker compose build'
+                            sh 'docker compose up -d'
                         }
                         def status = currentBuild.resultIsBetterOrEqualTo('SUCCESS') ? 'Succeed' : 'Failed'
                         sendToTelegram("🚀 Deployment Status: ${status} for Build #${BUILD_NUMBER}")
