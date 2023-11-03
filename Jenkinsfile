@@ -89,6 +89,11 @@ pipeline {
             }
         }
     }
+    post {
+        always {
+            emailext body: 'Check console output at $BUILD_URL to view the results.', subject: '${PROJECT_NAME} - Build #${BUILD_NUMBER} - $BUILD_STATUS', to: 'yan.sovanseyha@gmail.com'
+        }
+    }
 }
 
 def sendToTelegram(message) {
