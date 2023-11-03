@@ -4,4 +4,4 @@ services:
   web:
     image: ${DOCKER_REGISTRY}/${MY_IMAGE}:${BUILD_NUMBER}
     ports:
-      - "8080:80"
+      - "8081:80"
