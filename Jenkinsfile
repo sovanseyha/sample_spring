@@ -19,7 +19,7 @@ pipeline {
                         echo "Starting Build stage"
                         sh 'mvn clean install'
                         sh 'mvn package'
-                        sh "docker build -t ${DOCKER_REGISTRY}/${MY_IMAGE}:${BUILD_NUMBER} "
+                        sh "docker build -t ${DOCKER_REGISTRY}/${MY_IMAGE}:${BUILD_NUMBER} ."
                         echo "Build completed successfully"
                         currentBuild.result = 'SUCCESS'
                         sendToTelegram("✅ Build Succeeded for Build #${BUILD_NUMBER}")
