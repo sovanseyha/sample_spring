@@ -24,13 +24,18 @@ pipeline {
                         currentBuild.result = 'SUCCESS'
                         sendToTelegram("✅ Build Succeeded for Build #${BUILD_NUMBER}")
                     } catch (Exception e) {
-                        echo "Build failed with error: ${e}"
+                        echo "Deploy failed with error: ${e}"
                         currentBuild.result = 'FAILURE'
                         currentBuild.description = e.toString()
-                        def errorLog = sh(script: "cat ${JENKINS_HOME}/jobs/${JOB_NAME}/builds/${BUILD_NUMBER}/log", returnStdout: true)
-                        echo "Error Log:\n${errorLog}"
-                        sendToTelegram("❌ Build Failed for Build #${BUILD_NUMBER}\nError Message:\n${errorLog}")
-                        error("Build stage failed") // Mark the stage as failed
+                        sendToTelegram("❌ Deployment Failed for Build #${BUILD_NUMBER}\nError Message:\n${e.message}")
+                        error("Build stage failed")
+                        // echo "Build failed with error: ${e}"
+                        // currentBuild.result = 'FAILURE'
+                        // currentBuild.description = e.toString()
+                        // def errorLog = sh(script: "cat ${JENKINS_HOME}/jobs/${JOB_NAME}/builds/${BUILD_NUMBER}/log", returnStdout: true)
+                        // echo "Error Log:\n${errorLog}"
+                        // sendToTelegram("❌ Build Failed for Build #${BUILD_NUMBER}\nError Message:\n${e.message}")
+                        // error("Build stage failed") // Mark the stage as failed
                     }
                 }
             }
@@ -74,7 +79,6 @@ pipeline {
                             // Use Docker Compose to deploy the application
                             sh 'docker compose build'
                             sh 'docker compose up -d'
-                            sh 'docker ps'
                         }
                         def status = currentBuild.resultIsBetterOrEqualTo('SUCCESS') ? 'Succeed' : 'Failed'
                         sendToTelegram("🚀 Deployment Status: ${status} for Build #${BUILD_NUMBER}")
