@@ -1,7 +1,5 @@
 pipeline {
-    agent {
-        node 'worker-1'
-    }
+    agent any
     tools {
         maven 'maven'
     }
